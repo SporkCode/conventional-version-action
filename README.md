@@ -24,26 +24,26 @@ steps:
 
 ## Inputs
 
-| Name           | Required | Default | Description                                                      |
-| -------------- | -------- | ------- | ---------------------------------------------------------------- |
-| `tag-prefix`   | No       | `v`     | Prefix used for version tags when searching for the last release |
+| Name         | Required | Default | Description                                                      |
+| ------------ | -------- | ------- | ---------------------------------------------------------------- |
+| `tag-prefix` | No       | `v`     | Prefix used for version tags when searching for the last release |
 
 ## Outputs
 
-| Name       | Description                                                                                              |
-| ---------- | -------------------------------------------------------------------------------------------------------- |
-| `change`   | Semantic version change level: `major`, `minor`, `patch`, or `none`                                     |
-| `last`     | Last version found in tags (e.g. `1.2.3`). Empty if no previous tag exists.                             |
-| `next`     | Next version after applying the bump (e.g. `1.3.0`). Empty if change is `none` or no previous tag.      |
+| Name     | Description                                                                                        |
+| -------- | -------------------------------------------------------------------------------------------------- |
+| `change` | Semantic version change level: `major`, `minor`, `patch`, or `none`                                |
+| `last`   | Last version found in tags (e.g. `1.2.3`). Empty if no previous tag exists.                        |
+| `next`   | Next version after applying the bump (e.g. `1.3.0`). Empty if change is `none` or no previous tag. |
 
 ## Bump rules
 
-| Commit type                                               | Bump      |
-| --------------------------------------------------------- | --------- |
-| Any commit with `BREAKING CHANGE` footer                  | `major`   |
-| `feat`                                                    | `minor`   |
-| `fix`, `perf`                                             | `patch`   |
-| `chore`, `docs`, `style`, `refactor`, `test`, and others  | `none`    |
+| Commit type                                              | Bump    |
+| -------------------------------------------------------- | ------- |
+| Any commit with `BREAKING CHANGE` footer                 | `major` |
+| `feat`                                                   | `minor` |
+| `fix`, `perf`                                            | `patch` |
+| `chore`, `docs`, `style`, `refactor`, `test`, and others | `none`  |
 
 ## Example workflow: tag on bump
 

@@ -8,7 +8,9 @@ const { getLastVersion, getCommitMessages, parseCommits, determineBump } =
   await import('../src/commits.js')
 
 describe('commits.ts', () => {
-  afterEach(() => { jest.resetAllMocks() })
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
 
   describe('getLastVersion', () => {
     it('parses a full semver tag into a SemanticVersion object', async () => {
@@ -93,7 +95,7 @@ describe('commits.ts', () => {
       })
       await getCommitMessages(null)
       const args = exec.getExecOutput.mock.calls[0][1] as string[]
-      expect(args.some(a => a.includes('..HEAD'))).toBe(false)
+      expect(args.some((a) => a.includes('..HEAD'))).toBe(false)
     })
 
     it('handles multi-line commit messages', async () => {
@@ -103,13 +105,17 @@ describe('commits.ts', () => {
         stderr: ''
       })
       const result = await getCommitMessages(null)
-      expect(result[0].message).toBe('feat: add thing\n\nLonger description here.')
+      expect(result[0].message).toBe(
+        'feat: add thing\n\nLonger description here.'
+      )
     })
   })
 
   describe('parseCommits', () => {
     it('parses type, scope, and subject from a feat commit', () => {
-      const result = parseCommits([{ hash: 'abc', message: 'feat(auth): add oauth' }])
+      const result = parseCommits([
+        { hash: 'abc', message: 'feat(auth): add oauth' }
+      ])
       expect(result[0]).toMatchObject({
         type: 'feat',
         scope: 'auth',
@@ -127,7 +133,9 @@ describe('commits.ts', () => {
     })
 
     it('sets type to null for non-conventional commits', () => {
-      const result = parseCommits([{ hash: 'abc', message: 'updated a bunch of stuff' }])
+      const result = parseCommits([
+        { hash: 'abc', message: 'updated a bunch of stuff' }
+      ])
       expect(result[0].type).toBeNull()
     })
 
@@ -145,44 +153,100 @@ describe('commits.ts', () => {
   describe('determineBump', () => {
     it('returns major when any commit is breaking', () => {
       const commits = [
-        { hash: 'a', type: 'feat', scope: null, subject: 'x', breaking: true, raw: '' }
+        {
+          hash: 'a',
+          type: 'feat',
+          scope: null,
+          subject: 'x',
+          breaking: true,
+          raw: ''
+        }
       ]
       expect(determineBump(commits)).toBe('major')
     })
 
     it('returns major even when mixed with non-breaking commits', () => {
       const commits = [
-        { hash: 'a', type: 'feat', scope: null, subject: 'x', breaking: false, raw: '' },
-        { hash: 'b', type: 'fix', scope: null, subject: 'y', breaking: true, raw: '' }
+        {
+          hash: 'a',
+          type: 'feat',
+          scope: null,
+          subject: 'x',
+          breaking: false,
+          raw: ''
+        },
+        {
+          hash: 'b',
+          type: 'fix',
+          scope: null,
+          subject: 'y',
+          breaking: true,
+          raw: ''
+        }
       ]
       expect(determineBump(commits)).toBe('major')
     })
 
     it('returns minor for feat without breaking changes', () => {
       const commits = [
-        { hash: 'a', type: 'feat', scope: null, subject: 'x', breaking: false, raw: '' }
+        {
+          hash: 'a',
+          type: 'feat',
+          scope: null,
+          subject: 'x',
+          breaking: false,
+          raw: ''
+        }
       ]
       expect(determineBump(commits)).toBe('minor')
     })
 
     it('returns patch for fix', () => {
       const commits = [
-        { hash: 'a', type: 'fix', scope: null, subject: 'x', breaking: false, raw: '' }
+        {
+          hash: 'a',
+          type: 'fix',
+          scope: null,
+          subject: 'x',
+          breaking: false,
+          raw: ''
+        }
       ]
       expect(determineBump(commits)).toBe('patch')
     })
 
     it('returns patch for perf', () => {
       const commits = [
-        { hash: 'a', type: 'perf', scope: null, subject: 'x', breaking: false, raw: '' }
+        {
+          hash: 'a',
+          type: 'perf',
+          scope: null,
+          subject: 'x',
+          breaking: false,
+          raw: ''
+        }
       ]
       expect(determineBump(commits)).toBe('patch')
     })
 
     it('returns none for chore and docs commits', () => {
       const commits = [
-        { hash: 'a', type: 'chore', scope: null, subject: 'x', breaking: false, raw: '' },
-        { hash: 'b', type: 'docs', scope: null, subject: 'y', breaking: false, raw: '' }
+        {
+          hash: 'a',
+          type: 'chore',
+          scope: null,
+          subject: 'x',
+          breaking: false,
+          raw: ''
+        },
+        {
+          hash: 'b',
+          type: 'docs',
+          scope: null,
+          subject: 'y',
+          breaking: false,
+          raw: ''
+        }
       ]
       expect(determineBump(commits)).toBe('none')
     })

@@ -1,4 +1,11 @@
-import { jest, describe, it, expect, beforeEach, afterEach } from '@jest/globals'
+import {
+  jest,
+  describe,
+  it,
+  expect,
+  beforeEach,
+  afterEach
+} from '@jest/globals'
 import * as core from '../__fixtures__/core.js'
 import * as commits from '../__fixtures__/commits.js'
 import { ChangeLevel, SemanticVersion } from '../src/semanticVersion.js'
@@ -9,19 +16,30 @@ jest.unstable_mockModule('../src/commits.js', () => commits)
 const { run } = await import('../src/main.js')
 
 const PARSED_COMMITS = [
-  { hash: 'abc', type: 'feat', scope: null, subject: 'add thing', breaking: false, raw: 'feat: add thing' }
+  {
+    hash: 'abc',
+    type: 'feat',
+    scope: null,
+    subject: 'add thing',
+    breaking: false,
+    raw: 'feat: add thing'
+  }
 ]
 
 describe('main.ts', () => {
   beforeEach(() => {
     core.getInput.mockReturnValue('v')
     commits.getLastVersion.mockResolvedValue(new SemanticVersion(1, 0, 0))
-    commits.getCommitMessages.mockResolvedValue([{ hash: 'abc', message: 'feat: add thing' }])
+    commits.getCommitMessages.mockResolvedValue([
+      { hash: 'abc', message: 'feat: add thing' }
+    ])
     commits.parseCommits.mockReturnValue(PARSED_COMMITS)
     commits.determineBump.mockReturnValue(ChangeLevel.Minor)
   })
 
-  afterEach(() => { jest.resetAllMocks() })
+  afterEach(() => {
+    jest.resetAllMocks()
+  })
 
   it('outputs change, last, and next on success', async () => {
     await run()
