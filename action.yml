@@ -1,23 +1,28 @@
-name: The name of your action here
-description: Provide a description here
-author: Your name or organization here
+name: Conventional Version
+description:
+  Parses conventional commits and determines the next semantic version bump
+author: Chris Schreiber
 
-# Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
-  icon: heart
-  color: red
+  icon: tag
+  color: blue
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: Your input description here
-    required: true
-    default: '1000'
+  tag-prefix:
+    description:
+      Prefix used for version tags when searching for the last release
+    required: false
+    default: 'v'
 
-# Define your outputs here.
 outputs:
-  time:
-    description: Your output description here
+  change:
+    description: Semantic version change (major, minor, patch, none).
+  last:
+    description: Last version.
+  next:
+    description: >
+      Next version based on conventional commits. 
+      Empty if there is no semantic version change.
 
 runs:
   using: node24
