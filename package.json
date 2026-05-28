@@ -1,20 +1,26 @@
 {
-  "name": "typescript-action",
-  "description": "GitHub Actions TypeScript template",
+  "name": "conventional-version",
+  "description": "Semantic versioning from conventional commits",
   "version": "0.0.0",
   "author": "",
   "type": "module",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/SporkCode/conventional-version-action",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/SporkCode/conventional-version-action.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/SporkCode/conventional-version-action/issues"
   },
   "keywords": [
-    "actions"
+    "github",
+    "action",
+    "conventional",
+    "commit",
+    "semantic",
+    "version",
+    "cicd"
   ],
   "exports": {
     ".": "./dist/index.js"
@@ -24,7 +30,6 @@
   },
   "scripts": {
     "bundle": "npm run format:write && npm run package",
-    "ci-test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest",
     "coverage": "npx make-coverage-badge --output-path ./badges/coverage.svg",
     "format:write": "npx prettier --write .",
     "format:check": "npx prettier --check .",
