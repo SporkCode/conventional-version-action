@@ -57,8 +57,11 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 2000
+          tag-prefix: test
 
       - name: Print Output
         id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+        run: |
+          echo "${{ steps.test-action.outputs.change }}"
+          echo "${{ steps.test-action.outputs.last }}"
+          echo "${{ steps.test-action.outputs.next }}"

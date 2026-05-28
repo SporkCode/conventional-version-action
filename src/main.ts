@@ -1,27 +1,42 @@
 import * as core from '@actions/core'
-import { wait } from './wait.js'
+import {
+  getLastVersion,
+  getCommitMessages,
+  parseCommits,
+  determineBump
+} from './commits.js'
+import { ChangeLevel } from './semanticVersion.js'
 
-/**
- * The main function for the action.
- *
- * @returns Resolves when the action is complete.
- */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const tagPrefix = core.getInput('tag-prefix') || 'v'
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    const lastVersion = await getLastVersion(tagPrefix)
+    core.info(
+      lastVersion
+        ? `Last version: ${lastVersion}`
+        : 'No previous tag found, parsing all commits'
+    )
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const lastTag = lastVersion ? `${tagPrefix}${lastVersion}` : null
+    const rawCommits = await getCommitMessages(lastTag)
+    const commits = parseCommits(rawCommits)
+    const change = determineBump(commits)
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    core.info(
+      `Parsed ${commits.length} commit(s) since ${lastVersion ?? 'beginning'}`
+    )
+    core.info(`Suggested version bump: ${change}`)
+
+    const next =
+      lastVersion && change !== ChangeLevel.None
+        ? lastVersion.increment(change).toString()
+        : ''
+
+    core.setOutput('change', change)
+    core.setOutput('last', lastVersion?.toString() ?? '')
+    core.setOutput('next', next)
   } catch (error) {
-    // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
