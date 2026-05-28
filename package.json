@@ -47,7 +47,7 @@
     "conventional-commits-parser": "^6.4.0"
   },
   "devDependencies": {
-    "@eslint/compat": "^2.0.2",
+    "@eslint/compat": "^2.1.0",
     "@eslint/eslintrc": "^3.3.3",
     "@eslint/js": "^10.0.1",
     "@github/local-action": "^7.0.1",
