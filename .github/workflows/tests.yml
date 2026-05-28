@@ -59,6 +59,8 @@ jobs:
       - test-action
       - test-typescript
     if: github.event.pull_request.user.login == 'dependabot[bot]'
+    permissions:
+      pull-requests: write
 
     steps:
       - name: Merge
