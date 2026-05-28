@@ -13,9 +13,6 @@ on:
   pull_request:
     branches:
       - main
-  push:
-    branches:
-      - main
 
 permissions:
   contents: read
@@ -27,32 +24,26 @@ jobs:
 
     steps:
       - name: Checkout
-        id: checkout
         uses: actions/checkout@v6
 
       - name: Setup Node.js
-        id: setup-node
         uses: actions/setup-node@v6
         with:
           node-version-file: .node-version
           cache: npm
 
       - name: Remove dist/ Directory
-        id: remove-dist
         run: npx rimraf ./dist
 
       - name: Install Dependencies
-        id: install
         run: npm ci
 
       - name: Build dist/ Directory
-        id: build
         run: npm run bundle
 
       # This will fail the workflow if the `dist/` directory is different than
       # expected.
       - name: Compare Directories
-        id: diff
         run: |
           if [ ! -d dist/ ]; then
             echo "Expected dist/ directory does not exist.  See status below:"
@@ -69,7 +60,6 @@ jobs:
       # workflow artifact.
       - if: ${{ failure() && steps.diff.outcome == 'failure' }}
         name: Upload Artifact
-        id: upload
         uses: actions/upload-artifact@v7
         with:
           name: dist
